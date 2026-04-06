@@ -1,7 +1,40 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-/** file-type v20+ é ESM-only: require() quebra na Node 18 (Vercel). Import dinâmico em runtime. */
+
+/**
+ * Detecção por magic bytes (sem pacote file-type — evita ERR_PACKAGE_PATH_NOT_EXPORTED na Vercel/Node 18).
+ * Suporta apenas os tipos listados em ALLOWED_TYPES (jpeg, png, webp).
+ */
+function detectImageMimeFromBuffer(buf) {
+  if (!Buffer.isBuffer(buf) || buf.length < 12) return null;
+  if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return 'image/jpeg';
+  if (
+    buf[0] === 0x89 &&
+    buf[1] === 0x50 &&
+    buf[2] === 0x4e &&
+    buf[3] === 0x47 &&
+    buf[4] === 0x0d &&
+    buf[5] === 0x0a &&
+    buf[6] === 0x1a &&
+    buf[7] === 0x0a
+  ) {
+    return 'image/png';
+  }
+  if (
+    buf[0] === 0x52 &&
+    buf[1] === 0x49 &&
+    buf[2] === 0x46 &&
+    buf[3] === 0x46 &&
+    buf[8] === 0x57 &&
+    buf[9] === 0x45 &&
+    buf[10] === 0x42 &&
+    buf[11] === 0x50
+  ) {
+    return 'image/webp';
+  }
+  return null;
+}
 
 function loadSharp() {
   try {
@@ -46,12 +79,11 @@ async function getFileBuffer(file) {
 }
 
 async function validateAndProcessImage(file) {
-  const { fileTypeFromBuffer } = await import('file-type');
   const buffer = await getFileBuffer(file);
   const sharp = loadSharp();
 
-  const detected = await fileTypeFromBuffer(buffer);
-  if (!detected?.mime || !allowedMimes.includes(detected.mime)) {
+  const mime = detectImageMimeFromBuffer(buffer);
+  if (!mime || !allowedMimes.includes(mime)) {
     throw new Error('Apenas JPEG, PNG e WebP são permitidos');
   }
 
