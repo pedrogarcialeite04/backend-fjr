@@ -1,8 +1,19 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const sharp = require('sharp');
 const { fileTypeFromBuffer } = require('file-type');
+
+function loadSharp() {
+  try {
+    return require('sharp');
+  } catch (err) {
+    const e = new Error(
+      'Biblioteca de imagem indisponível neste ambiente. Em produção na Vercel, confira dependência sharp e logs do deploy.'
+    );
+    e.cause = err;
+    throw e;
+  }
+}
 
 const { UPLOAD_DIR } = require('./constants');
 
@@ -36,6 +47,7 @@ async function getFileBuffer(file) {
 
 async function validateAndProcessImage(file) {
   const buffer = await getFileBuffer(file);
+  const sharp = loadSharp();
 
   const detected = await fileTypeFromBuffer(buffer);
   if (!detected?.mime || !allowedMimes.includes(detected.mime)) {

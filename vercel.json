@@ -15,5 +15,10 @@
       "src": "/(.*)",
       "dest": "/server/server.js"
     }
-  ]
+  ],
+  "functions": {
+    "server/server.js": {
+      "maxDuration": 30
+    }
+  }
 }
