@@ -1,23 +1,7 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "server/server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/server/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/server/server.js"
-    }
-  ],
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
-    "server/server.js": {
+    "index.js": {
       "maxDuration": 30
     }
   }

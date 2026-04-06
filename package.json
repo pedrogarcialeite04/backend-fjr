@@ -1,12 +1,12 @@
 {
   "name": "fjs-topografia",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Landing page + painel admin + API Node.js/MongoDB (FJS Topografia)",
-  "main": "server/server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server/server.js",
-    "dev": "nodemon server/server.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "seed": "node server/utils/seed.js",
     "vercel-build": "echo 'Build completo'"
   },
