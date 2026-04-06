@@ -1,7 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const { fileTypeFromBuffer } = require('file-type');
+/** file-type v20+ é ESM-only: require() quebra na Node 18 (Vercel). Import dinâmico em runtime. */
 
 function loadSharp() {
   try {
@@ -46,6 +46,7 @@ async function getFileBuffer(file) {
 }
 
 async function validateAndProcessImage(file) {
+  const { fileTypeFromBuffer } = await import('file-type');
   const buffer = await getFileBuffer(file);
   const sharp = loadSharp();
 
