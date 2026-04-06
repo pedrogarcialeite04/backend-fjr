@@ -1,6 +1,6 @@
 {
   "name": "fjs-topografia",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "Landing page + painel admin + API Node.js/MongoDB (FJS Topografia)",
   "main": "index.js",

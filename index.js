@@ -1,5 +1,4 @@
 /**
- * Entrada oficial para a Vercel (Express em modo zero-config).
- * Mantém server/server.js como fonte do app + script local (npm run dev).
+ * Entrada local (npm start / npm run dev). Na Vercel o tráfego vai para api/index.js.
  */
-module.exports = require('./server/server');
+module.exports = require('./api/index');
